@@ -63,6 +63,13 @@
         text-decoration: underline;
     }
 
+    .foto-empleado {
+        text-align: center;
+        max-width: 200px;
+        max-height: 200px;
+        overflow: auto;
+    }
+
 </style>
 </head>
 <body>
@@ -80,7 +87,7 @@
         die("Conexión fallida: " . $conn->connect_error);
     }
 
-    $sql = "SELECT id, nombre, apellidos, correo, rol, activo FROM db";
+    $sql = "SELECT id, nombre, apellidos, correo, rol, activo, foto_encrypt as foto_real FROM db";
     $result = $conn->query($sql);
 
     if ($result) {
@@ -93,6 +100,7 @@
                 echo "<div>Correo: ".$row["correo"]."</div>";
                 echo "<div>Rol: ".$row["rol"]."</div>";
                 echo "<div>Activo: ".($row["activo"] == 1 ? "Sí" : "No")."</div>";
+                echo "<div class='foto-empleado'><img src='uploads/".$row["foto_real"]."' alt='Foto de ".$row["nombre"]." ".$row["apellidos"]."'></div>";
                 echo "<div class='acciones'><a href='editar_empleado.php?id=".$row["id"]."'>Editar</a> | <a href='eliminar_empleado.php?id=".$row["id"]."' class='eliminar'>Eliminar</a> | <a href='ver_detalle.php?id=".$row["id"]."' class='detalle'>Ver detalle</a></div>";
                 echo "</div>";
             }
