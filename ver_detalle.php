@@ -65,7 +65,7 @@ if ($conn->connect_error) {
 if(isset($_GET['id']) && !empty($_GET['id'])) {
     $empleado_id = $_GET['id'];
 
-    $sql = "SELECT nombre, apellidos, correo, rol, activo FROM db WHERE id = $empleado_id";
+    $sql = "SELECT nombre, apellidos, correo, rol, activo, foto_encrypt as foto_real FROM db WHERE id=$empleado_id";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0) {
@@ -76,6 +76,7 @@ if(isset($_GET['id']) && !empty($_GET['id'])) {
         echo "<div>Correo: ".$row["correo"]."</div>";
         echo "<div>Rol: ".$row["rol"]."</div>";
         echo "<div>Activo: ".($row["activo"] ? "Sí" : "No")."</div>";
+        echo "<img src='uploads/".$row["foto_real"]."' alt='Foto de empleado' style='max-width:150px;width:100%'>";
         echo "</div>";
         echo "<p><a href='javascript:history.back()'>Regresar al listado</a></p>";
     } else {

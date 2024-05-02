@@ -22,6 +22,7 @@ if ($result->num_rows > 0) {
     $apellidos = $row['apellidos'];
     $correo = $row['correo'];
     $rol = $row['rol'];
+    $foto = $row['foto_encrypt'];
 } else {
     echo "No se encontró el empleado.";
     exit();
@@ -60,11 +61,13 @@ $(document).ready(function() {
             return;
         }
 
-        var formData = $(this).serialize();
+        var formData = new FormData(this);
         $.ajax({
             type: "POST",
             url: "actualizar_empleado.php",
             data: formData,
+            processData: false,
+            contentType: false,
             success: function(response) {
                 window.location.href = "listado_empleados.php";
             }
@@ -158,7 +161,7 @@ a:hover {
 </head>
 <body>
 <h2>Edición de empleados</h2>
-<form id="editarEmpleadoForm">
+<form id="editarEmpleadoForm" enctype="multipart/form-data">
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>" />
 
@@ -173,7 +176,10 @@ a:hover {
         <option value="Gerente" <?php if ($rol === "Gerente") echo "selected"; ?>>Gerente</option>
         <option value="Ejecutivo" <?php if ($rol === "Ejecutivo") echo "selected"; ?>>Ejecutivo</option>
     </select>
-
+    <img src="uploads/<?php echo $foto; ?>" alt="Foto de perfil" style='max-width:150px;width:100%' />
+    <label for="foto">Foto:</label>
+    <input type="file" id="foto" name="foto" accept="image/*" />
+    
     <input type="hidden" name="id" value="<?php echo $id; ?>" />
     <input type="submit" value="Guardar" />
 </form>
