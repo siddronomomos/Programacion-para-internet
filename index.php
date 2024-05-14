@@ -81,10 +81,15 @@ $(document).ready(function() {
                     password: password
                 },
                 success: function(response) {
-                    if (response === "existe") {
+                    if (response.trim() === "existe") {
                         window.location.href = "bienvenido.php";
-                    } else {
+                    } else if (response.trim() === "contrasena_incorrecta") {
+                        $("#mensaje").text("Contraseña incorrecta.");
+                    } else if (response.trim() === "usuario_no_existe") {
                         $("#mensaje").text("El usuario no existe o no está activo.");
+                    } else {
+                        $("#mensaje").text("Error en la autenticación.");
+                        console.log(response);
                     }
                 }
             });
