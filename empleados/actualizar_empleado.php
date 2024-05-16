@@ -18,7 +18,7 @@ $rol = $_POST['rol'];
 if ($_FILES['foto']['name'] !== '') {
     $foto_nombre_real = $_FILES['foto']['name'];
     $foto_nombre_encriptado = md5(uniqid(rand(), true)) . '_' . $foto_nombre_real;
-    $ruta_destino = 'uploads/' . $foto_nombre_encriptado;
+    $ruta_destino = '../../uploads/' . $foto_nombre_encriptado;
 
     if (move_uploaded_file($_FILES['foto']['tmp_name'], $ruta_destino)) {
         $sql = "UPDATE db SET nombre='$nombre', apellidos='$apellidos', rol='$rol', foto_real='$foto_nombre_real', foto_encrypt='$foto_nombre_encriptado' WHERE id=$id";

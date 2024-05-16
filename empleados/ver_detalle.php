@@ -112,7 +112,7 @@ if(isset($_GET['id']) && !empty($_GET['id'])) {
         echo "<div>Correo: ".$row["correo"]."</div>";
         echo "<div>Rol: ".$row["rol"]."</div>";
         echo "<div>Activo: ".($row["activo"] ? "Sí" : "No")."</div>";
-        echo "<img src='uploads/".$row["foto_real"]."' alt='Foto de empleado' style='max-width:150px;width:100%'>";
+        echo "<img src='../uploads/".$row["foto_real"]."' alt='Foto de empleado' style='max-width:150px;width:100%'>";
         echo "</div>";
         echo "<p><a href='javascript:history.back()'>Regresar al listado</a></p>";
     } else {

@@ -208,7 +208,7 @@ a:hover {
         <option value="Gerente" <?php if ($rol === "Gerente") echo "selected"; ?>>Gerente</option>
         <option value="Ejecutivo" <?php if ($rol === "Ejecutivo") echo "selected"; ?>>Ejecutivo</option>
     </select>
-    <img src="uploads/<?php echo $foto; ?>" alt="Foto de perfil" style='max-width:150px;width:100%' />
+    <img src="../uploads/<?php echo $foto; ?>" alt="Foto de perfil" style='max-width:150px;width:100%' />
     <label for="foto">Foto:</label>
     <input type="file" id="foto" name="foto" accept="image/*" />
     
