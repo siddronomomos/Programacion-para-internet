@@ -1,4 +1,3 @@
-
 <?php
 $servername = "localhost";
 $username = "root";
@@ -29,6 +28,15 @@ if ($result->num_rows > 0) {
 }
 
 $conn->close();
+
+session_start();
+
+if (!isset($_SESSION['usuario'])) {
+    header("Location: index.php");
+    exit();
+}
+
+$nombreUsuario = $_SESSION['usuario'];
 ?>
 
 <!DOCTYPE html>
@@ -157,10 +165,34 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+ .menu {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .menu a:hover {
+            text-decoration: underline;
+        }
 </style>
 </head>
 <body>
 <h2>Edición de empleados</h2>
+<div class="menu">
+        <a href="bienvenido.php">INICIO</a>
+        <a href="listado_empleados.php">EMPLEADOS</a>
+        <a href="#">PRODUCTOS</a>
+        <a href="#">PROMOCIONES</a>
+        <a href="#">PEDIDOS</a>
+        <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
+        <a href="cerrar_sesion.php">CERRAR SESIÓN</a>
+    </div>
 <form id="editarEmpleadoForm" enctype="multipart/form-data">
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>" />
