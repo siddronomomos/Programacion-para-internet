@@ -1,13 +1,9 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "proyecto final";
+include ('conecta.php');
+$conn = conecta();
 
-$conn = new mysqli($servername, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+if (!$conn) {
+    exit("Error al conectar a la base de datos");
 }
 
 $nombre = $_POST['nombre'];
@@ -27,7 +23,7 @@ $real_file_name = $_FILES["foto"]["name"];
 
 $encrypted_target_file = $target_dir . $encrypted_name;
 if (move_uploaded_file($_FILES["foto"]["tmp_name"], $encrypted_target_file)) {
-    $sql = "INSERT INTO db (nombre, apellidos, correo, contraseña, rol, foto_real, foto_encrypt) 
+    $sql = "INSERT INTO empleados (nombre, apellidos, correo, pass, rol, foto_real, foto_encrypt) 
             VALUES ('$nombre', '$apellidos', '$correo', '$password', '$rol', '$real_file_name', '$encrypted_name')";
     if ($conn->query($sql) === TRUE) {
         echo "Empleado agregado correctamente";
@@ -39,4 +35,3 @@ if (move_uploaded_file($_FILES["foto"]["tmp_name"], $encrypted_target_file)) {
 }
 
 $conn->close();
-?>

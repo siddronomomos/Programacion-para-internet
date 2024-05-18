@@ -1,19 +1,15 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "proyecto final";
+include ('conecta.php');
 
-$conn = new mysqli($servername, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+$conn = conecta();
+if (!$conn) {
+    exit('Error al conectar a la base de datos');
 }
 
 $correo = $_POST['correo'];
 $password = $_POST['password'];
 
-$sql = "SELECT * FROM db WHERE correo = ? AND activo = 1";
+$sql = "SELECT * FROM empleados WHERE correo = ? AND activo = 1";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $correo);
 $stmt->execute();
@@ -21,8 +17,8 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    
-    if (password_verify($password, $row['contraseña'])) {
+
+    if (password_verify($password, $row['pass'])) {
         session_start();
         $_SESSION['usuario'] = $row['nombre'];
         echo "existe";
@@ -35,4 +31,3 @@ if ($result->num_rows > 0) {
 
 $stmt->close();
 $conn->close();
-?>

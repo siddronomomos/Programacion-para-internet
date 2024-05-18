@@ -1,8 +1,8 @@
 <?php
-session_start(); 
+session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php"); 
+    header("Location: ../index.php");
     exit();
 }
 
@@ -12,6 +12,7 @@ $nombreUsuario = $_SESSION['usuario'];
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +46,7 @@ $nombreUsuario = $_SESSION['usuario'];
 
         .menu {
             text-align: center;
-            margin-bottom: 20px; 
+            margin-bottom: 20px;
         }
 
         .menu a {
@@ -53,12 +54,9 @@ $nombreUsuario = $_SESSION['usuario'];
             text-decoration: none;
             color: #007bff;
         }
-
-        .menu a:nth-last-child(2) {
-            font-weight: bold;
-        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2 class="title">Bienvenido al sistema</h2>
@@ -72,8 +70,9 @@ $nombreUsuario = $_SESSION['usuario'];
             <a href="#">PROMOCIONES</a>
             <a href="#">PEDIDOS</a>
             <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
-            <a href="cerrar_sesion.php">CERRAR SESIÓN</a>
+            <a href="./funciones/cerrar_sesion.php">CERRAR SESIÓN</a>
         </div>
     </div>
 </body>
+
 </html>
