@@ -65,7 +65,7 @@ $nombreUsuario = $_SESSION['usuario'];
         </div>
         <div class="menu">
             <a href="bienvenido.php">INICIO</a>
-            <a href="listado_empleados.php">EMPLEADOS</a>
+            <a href="./empleados/listado_empleados.php">EMPLEADOS</a>
             <a href="#">PRODUCTOS</a>
             <a href="#">PROMOCIONES</a>
             <a href="#">PEDIDOS</a>

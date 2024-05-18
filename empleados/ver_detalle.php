@@ -88,7 +88,7 @@ $nombreUsuario = $_SESSION['usuario'];
         <a href="./funciones/cerrar_sesion.php">CERRAR SESIÓN</a>
     </div>
     <?php
-    include ('conecta.php');
+    include ('./funciones/conecta.php');
     $conn = conecta();
 
     if (!$conn) {

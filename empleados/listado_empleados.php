@@ -113,7 +113,7 @@ $nombreUsuario = $_SESSION['usuario'];
     </div>
     <div id="listadoEmpleados">
         <?php
-        include ('conecta.php');
+        include ('./funciones/conecta.php');
         $conn = conecta();
         if (!$conn) {
             exit("Error al conectar a la base de datos");
