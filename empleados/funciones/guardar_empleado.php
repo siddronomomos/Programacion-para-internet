@@ -8,7 +8,7 @@ if (!$conn) {
 
 $nombre = $_POST['nombre'];
 $apellidos = $_POST['apellidos'];
-$correo = $_POST['correo'];
+$codigo = $_POST['correo'];
 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 $rol = $_POST['rol'];
 
@@ -24,7 +24,7 @@ $real_file_name = $_FILES["foto"]["name"];
 $encrypted_target_file = $target_dir . $encrypted_name;
 if (move_uploaded_file($_FILES["foto"]["tmp_name"], $encrypted_target_file)) {
     $sql = "INSERT INTO empleados (nombre, apellidos, correo, pass, rol, foto_real, foto_encrypt) 
-            VALUES ('$nombre', '$apellidos', '$correo', '$password', '$rol', '$real_file_name', '$encrypted_name')";
+            VALUES ('$nombre', '$apellidos', '$codigo', '$password', '$rol', '$real_file_name', '$encrypted_name')";
     if ($conn->query($sql) === TRUE) {
         echo "Empleado agregado correctamente";
     } else {

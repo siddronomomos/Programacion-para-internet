@@ -18,7 +18,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $nombre = $row['nombre'];
     $apellidos = $row['apellidos'];
-    $correo = $row['correo'];
+    $codigo = $row['correo'];
     $rol = $row['rol'];
     $foto = $row['foto_encrypt'];
 } else {
@@ -182,7 +182,7 @@ $nombreUsuario = $_SESSION['usuario'];
     <div class="menu">
         <a href="../bienvenido.php">INICIO</a>
         <a href="listado_empleados.php">EMPLEADOS</a>
-        <a href="#">PRODUCTOS</a>
+        <a href="../productos/listado_productos.php">PRODUCTOS</a>
         <a href="#">PROMOCIONES</a>
         <a href="#">PEDIDOS</a>
         <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
@@ -196,7 +196,7 @@ $nombreUsuario = $_SESSION['usuario'];
         <input type="text" id="apellidos" name="apellidos" value="<?php echo $apellidos; ?>" />
 
         <label for="correo">Correo:</label>
-        <input type="email" id="correo" name="correo" value="<?php echo $correo; ?>" disabled />
+        <input type="email" id="correo" name="correo" value="<?php echo $codigo; ?>" disabled />
 
         <label for="rol">Rol:</label>
         <select id="rol" name="rol">

@@ -15,20 +15,20 @@ $nombreUsuario = $_SESSION['usuario'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alta de empleados</title>
+    <title>Alta de productos</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            $("#altaEmpleadoForm").submit(function (event) {
+            $("#altaProductoForm").submit(function (event) {
                 event.preventDefault();
                 var nombre = $("#nombre").val();
-                var apellidos = $("#apellidos").val();
-                var correo = $("#correo").val();
-                var password = $("#password").val();
-                var rol = $("#rol").val();
-                var foto = $("#foto").val();
+                var codigo = $("#codigo").val();
+                var descripcion = $("#descripcion").val();
+                var costo = $("#costo").val();
+                var stock = $("#stock").val();
+                var archivo = $("#archivo").val();
 
-                if (nombre === "" || apellidos === "" || correo === "" || password === "" || rol === "" || foto === "") {
+                if (nombre === "" || codigo === "" || descripcion === "" || costo === "" || stock === "" || archivo === "") {
                     $("#errorContainer").text("Faltan campos por llenar.");
                     setTimeout(function () {
                         $("#errorContainer").text("");
@@ -38,23 +38,23 @@ $nombreUsuario = $_SESSION['usuario'];
 
                     $.ajax({
                         type: "POST",
-                        url: "./funciones/guardar_empleado.php",
+                        url: "./funciones/guardar_producto.php",
                         data: formData,
                         processData: false,
                         contentType: false,
                         success: function (response) {
-                            window.location.href = "listado_empleados.php";
+                            window.location.href = "listado_productos.php";
                         }
                     });
                 }
             });
 
-            $("#correo").blur(function () {
-                var correo = $(this).val();
+            $("#codigo").blur(function () {
+                var codigo = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: "./funciones/validar_correo.php",
-                    data: { correo: correo },
+                    url: "./funciones/validar_codigo.php",
+                    data: { codigo: codigo },
                     success: function (response) {
                         $("#errorContainer").text(response);
                         setTimeout(function () {
@@ -166,45 +166,42 @@ $nombreUsuario = $_SESSION['usuario'];
 </head>
 
 <body>
-    <h2>Alta de empleados</h2>
+    <h2>Alta de productos</h2>
     <div class="menu">
         <a href="../bienvenido.php">INICIO</a>
-        <a href="listado_empleados.php">EMPLEADOS</a>
-        <a href="../productos/listado_productos.php">PRODUCTOS</a>
+        <a href="../empleados/listado_empleados.php">EMPLEADOS</a>
+        <a href="listado_productos.php">PRODUCTOS</a>
         <a href="#">PROMOCIONES</a>
         <a href="#">PEDIDOS</a>
         <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
         <a href="./funciones/cerrar_sesion.php">CERRAR SESIÓN</a>
     </div>
-    <form id="altaEmpleadoForm" enctype="multipart/form-data">
+    <form id="altaProductoForm" enctype="multipart/form-data">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" /><br /><br />
 
-        <label for="apellidos">Apellidos:</label>
-        <input type="text" id="apellidos" name="apellidos" /><br /><br />
+        <label for="codigo">Código:</label>
+        <input type="text" id="codigo" name="codigo" /><br /><br />
 
-        <label for="correo">Correo:</label>
-        <input type="email" id="correo" name="correo" /><br /><br />
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" name="descripcion" /><br /><br />
 
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" /><br /><br />
+        <label for="costo">Costo:</label>
+        <input type="text" id="costo" name="costo" /><br /><br />
 
-        <label for="rol">Rol:</label>
-        <select id="rol" name="rol">
-            <option value="">Seleccione un rol</option>
-            <option value="Gerente">Gerente</option>
-            <option value="Ejecutivo">Ejecutivo</option>
-        </select><br /><br />
+        <label for="stock">Stock:</label>
+        <input type="text" id="stock" name="stock" /><br /><br />
 
-        <label for="foto" class="custom-file-upload">
-            <i class="fas fa-cloud-upload-alt"></i> Seleccionar Foto
+        <label for="archivo" class="custom-file-upload">
+            <i class="fas fa-cloud-upload-alt"></i> Seleccionar Archivo
         </label>
-        <input type="file" id="foto" name="foto" accept="image/*" required style="display: none;" /> <br>
 
-        <input type="submit" value="Guardar" />
+        <input type="file" id="archivo" name="archivo" accept="image/*" style="display: none;" /> <br>
+
+        <input type="submit" value="Guardar" onclick="" />
     </form>
     <div id="errorContainer"></div>
-    <p><a href="listado_empleados.php">Regresar al listado</a></p>
+    <p><a href="listado_productos.php">Regresar al listado</a></p>
 </body>
 
 </html>
