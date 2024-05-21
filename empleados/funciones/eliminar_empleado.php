@@ -8,7 +8,9 @@ if (isset($_GET['id'])) {
         exit("Error al conectar a la base de datos");
     }
 
-    $sql = "UPDATE empleados SET activo = 0 WHERE id = $id_empleado";
+    $id_empleado = $_GET['id'];
+
+    $sql = "UPDATE empleados SET eliminado = 1 WHERE id = $id_empleado";
 
     if ($conn->query($sql) === TRUE) {
         header("Location: ../listado_empleados.php");

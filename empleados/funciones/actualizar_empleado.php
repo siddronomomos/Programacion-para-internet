@@ -11,6 +11,7 @@ $id = $_POST['id'];
 $nombre = $_POST['nombre'];
 $apellidos = $_POST['apellidos'];
 $rol = $_POST['rol'];
+$activo = $_POST['activo'] ? 1 : 0;
 
 if ($_FILES['foto']['name'] !== '') {
     $foto_nombre_real = $_FILES['foto']['name'];
@@ -28,7 +29,7 @@ if ($_FILES['foto']['name'] !== '') {
             }
         }
 
-        $sql = "UPDATE empleados SET nombre='$nombre', apellidos='$apellidos', rol='$rol', foto_real='$foto_nombre_real', foto_encrypt='$foto_nombre_encriptado' WHERE id=$id";
+        $sql = "UPDATE empleados SET nombre='$nombre', apellidos='$apellidos', rol='$rol', foto_real='$foto_nombre_real', foto_encrypt='$foto_nombre_encriptado', activo=$activo WHERE id=$id";
 
         if ($conn->query($sql) === TRUE) {
             echo "Empleado actualizado exitosamente";
@@ -39,7 +40,7 @@ if ($_FILES['foto']['name'] !== '') {
         echo "Error al mover la foto.";
     }
 } else {
-    $sql = "UPDATE empleados SET nombre='$nombre', apellidos='$apellidos', rol='$rol' WHERE id=$id";
+    $sql = "UPDATE empleados SET nombre='$nombre', apellidos='$apellidos', rol='$rol', activo=$activo WHERE id=$id";
 
     if ($conn->query($sql) === TRUE) {
         echo "Empleado actualizado exitosamente";

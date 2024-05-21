@@ -104,7 +104,7 @@ $nombreUsuario = $_SESSION['usuario'];
     <h2>Listado de empleados</h2>
     <div class="menu">
         <a href="../bienvenido.php">INICIO</a>
-        <a href="listado_empleados.php">EMPLEADOS</a>
+        <a href="../empleados/listado_empleados.php">EMPLEADOS</a>
         <a href="../productos/listado_productos.php">PRODUCTOS</a>
         <a href="#">PROMOCIONES</a>
         <a href="#">PEDIDOS</a>
@@ -119,12 +119,14 @@ $nombreUsuario = $_SESSION['usuario'];
             exit("Error al conectar a la base de datos");
         }
 
-        $sql = "SELECT id, nombre, apellidos, correo, rol, activo, foto_encrypt as foto_real FROM empleados";
+        $sql = "SELECT id, nombre, apellidos, correo, rol, activo, eliminado, foto_encrypt as foto_real FROM empleados";
         $result = $conn->query($sql);
 
         if ($result) {
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
+                    if ($row["eliminado"] == 1)
+                        continue;
                     echo "<div class='empleado'>";
                     echo "<div>ID: " . $row["id"] . "</div>";
                     echo "<div>Nombre: " . $row["nombre"] . "</div>";
@@ -133,7 +135,7 @@ $nombreUsuario = $_SESSION['usuario'];
                     echo "<div>Rol: " . $row["rol"] . "</div>";
                     echo "<div>Activo: " . ($row["activo"] == 1 ? "Sí" : "No") . "</div>";
                     echo "<div class='foto-empleado'><img src='./images/" . $row["foto_real"] . "' alt='Foto de " . $row["nombre"] . " " . $row["apellidos"] . "'style='max-width:150px;width:100%'></div>";
-                    echo "<div class='acciones'><a href='editar_empleado.php?id=" . $row["id"] . "'>Editar</a> | <a href='eliminar_empleado.php?id=" . $row["id"] . "' class='eliminar'>Eliminar</a> | <a href='ver_detalle.php?id=" . $row["id"] . "' class='detalle'>Ver detalle</a></div>";
+                    echo "<div class='acciones'><a href='editar_empleado.php?id=" . $row["id"] . "'>Editar</a> | <a href='./funciones/eliminar_empleado.php?id=" . $row["id"] . "' class='eliminar'>Eliminar</a> | <a href='ver_detalle.php?id=" . $row["id"] . "' class='detalle'>Ver detalle</a></div>";
                     echo "</div>";
                 }
             } else {

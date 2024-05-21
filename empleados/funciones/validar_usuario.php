@@ -9,7 +9,7 @@ if (!$conn) {
 $codigo = $_POST['correo'];
 $password = $_POST['password'];
 
-$sql = "SELECT * FROM empleados WHERE correo = ? AND activo = 1";
+$sql = "SELECT * FROM empleados WHERE correo = ? AND eliminado = 0";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $codigo);
 $stmt->execute();

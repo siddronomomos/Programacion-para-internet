@@ -11,19 +11,21 @@ $conn = conecta();
 
 $id = $_GET['id'];
 
-$sql = "SELECT * FROM empleados WHERE id = $id";
+$sql = "SELECT * FROM productos WHERE id = $id";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $nombre = $row['nombre'];
-    $apellidos = $row['apellidos'];
-    $correo = $row['correo'];
-    $rol = $row['rol'];
-    $foto = $row['foto_encrypt'];
-    $activo = $row['activo'];
+    $codigo = $row['codigo'];
+    $descripcion = $row['descripcion'];
+    $costo = $row['costo'];
+    $stock = $row['stock'];
+    $archivo = $row['archivo_n'];
+    $status = $row['status'];
+
 } else {
-    echo "No se encontró el empleado.";
+    echo "No se encontró el producto.";
     exit();
 }
 
@@ -39,23 +41,26 @@ $nombreUsuario = $_SESSION['usuario'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edición de empleados</title>
+    <title>Edición de productos</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
             function validarCampos() {
                 var nombre = $("#nombre").val();
-                var apellidos = $("#apellidos").val();
-                var correo = $("#correo").val();
+                var codigo = $("#codigo").val();
+                var descripcion = $("#descripcion").val();
+                var costo = $("#costo").val();
+                var stock = $("#stock").val();
+                var archivo = $("#archivo").val();
 
-                if (nombre === "" || apellidos === "" || correo === "") {
+                if (nombre === "" || codigo === "" || descripcion === "" || costo === "" || stock === "") {
                     $("#mensaje").text("Faltan campos por llenar.");
                     return false;
                 }
                 return true;
             }
 
-            $("#editarEmpleadoForm").submit(function (event) {
+            $("#editarProductoForm").submit(function (event) {
                 event.preventDefault();
                 if (!validarCampos()) {
                     setTimeout(function () {
@@ -67,22 +72,22 @@ $nombreUsuario = $_SESSION['usuario'];
                 var formData = new FormData(this);
                 $.ajax({
                     type: "POST",
-                    url: "./funciones/actualizar_empleado.php",
+                    url: "./funciones/actualizar_producto.php",
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        window.location.href = "listado_empleados.php";
+                        window.location.href = "./listado_productos.php";
                     }
                 });
             });
 
-            $("#correo").blur(function () {
-                var correo = $(this).val();
+            $("#codigo").blur(function () {
+                var codigo = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: "./funciones/validar_correo.php",
-                    data: { correo: correo },
+                    url: "./funciones/validar_codigo.php",
+                    data: { codigo: codigo },
                     success: function (response) {
                         $("#errorContainer").text(response);
                         setTimeout(function () {
@@ -119,7 +124,6 @@ $nombreUsuario = $_SESSION['usuario'];
         }
 
         input[type="text"],
-        input[type="email"],
         select {
             width: calc(100% - 22px);
             padding: 10px;
@@ -179,7 +183,7 @@ $nombreUsuario = $_SESSION['usuario'];
 </head>
 
 <body>
-    <h2>Edición de empleados</h2>
+    <h2>Edición de productos</h2>
     <div class="menu">
         <a href="../bienvenido.php">INICIO</a>
         <a href="../empleados/listado_empleados.php">EMPLEADOS</a>
@@ -189,38 +193,32 @@ $nombreUsuario = $_SESSION['usuario'];
         <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
         <a href="./funciones/cerrar_sesion.php">CERRAR SESIÓN</a>
     </div>
-    <form id="editarEmpleadoForm" enctype="multipart/form-data">
+    <form id="editarProductoForm" enctype="multipart/form-data">
         <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>" />
+        <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>" /><br /><br />
+        <label for="codigo">Código:</label>
+        <input type="text" id="codigo" name="codigo" value="<?php echo $codigo; ?>" disabled /><br /><br />
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" name="descripcion" value="<?php echo $descripcion; ?>" /><br /><br />
+        <label for="costo">Costo:</label>
+        <input type="text" id="costo" name="costo" value="<?php echo $costo; ?>" /><br /><br />
+        <label for="stock">Stock:</label>
+        <input type="text" id="stock" name="stock" value="<?php echo $stock; ?>" /><br /><br />
+        <label for="status">Activo:</label>
+        <input type="checkbox" id="status" name="status" <?php echo $status == 1 ? 'checked' : ''; ?> /><br /><br />
+        <div>
 
-        <label for="apellidos">Apellidos:</label>
-        <input type="text" id="apellidos" name="apellidos" value="<?php echo $apellidos; ?>" />
-
-        <label for="correo">Correo:</label>
-        <input type="email" id="correo" name="correo" value="<?php echo $correo; ?>" disabled />
-
-        <label for="rol">Rol:</label>
-        <select id="rol" name="rol">
-            <option value="Gerente" <?php if ($rol === "Gerente")
-                echo "selected"; ?>>Gerente</option>
-            <option value="Ejecutivo" <?php if ($rol === "Ejecutivo")
-                echo "selected"; ?>>Ejecutivo</option>
-        </select>
-        <label for="activo">Activo:</label>
-        <input type="checkbox" id="activo" name="activo" <?php if ($activo == 1)
-            echo "checked"; ?> />
-        <div class="foto-empleado">
-            <img src="./images/<?php echo $foto; ?>" alt="Foto de perfil" style='max-width:150px;width:100%' />
+            <img src="./images/<?php echo $archivo; ?>" alt="Foto del producto" style='max-width:150px;width:100%' />
         </div>
-        <label for="foto">Foto:</label>
-        <input type="file" id="foto" name="foto" accept="image/*" />
+        <label for="archivo">Foto:</label>
+        <input type="file" id="archivo" name="archivo" accept="image/*" />
 
         <input type="hidden" name="id" value="<?php echo $id; ?>" />
         <input type="submit" value="Guardar" />
     </form>
     <div id="mensaje"></div>
     <div id="errorContainer"></div>
-    <p><a href="listado_empleados.php">Regresar</a></p>
+    <p><a href="listado_productos.php">Regresar</a></p>
 </body>
 
 </html>

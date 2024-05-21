@@ -43,7 +43,7 @@ $nombreUsuario = $_SESSION['usuario'];
                         processData: false,
                         contentType: false,
                         success: function (response) {
-                            window.location.href = "listado_productos.php";
+                            window.location.href = "./listado_productos.php";
                         }
                     });
                 }
@@ -170,7 +170,7 @@ $nombreUsuario = $_SESSION['usuario'];
     <div class="menu">
         <a href="../bienvenido.php">INICIO</a>
         <a href="../empleados/listado_empleados.php">EMPLEADOS</a>
-        <a href="listado_productos.php">PRODUCTOS</a>
+        <a href="../productos/listado_productos.php">PRODUCTOS</a>
         <a href="#">PROMOCIONES</a>
         <a href="#">PEDIDOS</a>
         <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>

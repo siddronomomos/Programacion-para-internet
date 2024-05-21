@@ -105,7 +105,7 @@ $nombreUsuario = $_SESSION['usuario'];
     <div class="menu">
         <a href="../bienvenido.php">INICIO</a>
         <a href="../empleados/listado_empleados.php">EMPLEADOS</a>
-        <a href="./listado_productos.php">PRODUCTOS</a>
+        <a href="../productos/listado_productos.php">PRODUCTOS</a>
         <a href="#">PROMOCIONES</a>
         <a href="#">PEDIDOS</a>
         <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
@@ -125,6 +125,8 @@ $nombreUsuario = $_SESSION['usuario'];
         if ($result) {
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
+                    if ($row["eliminado"] == 1)
+                        continue;
                     echo "<div class='producto'>";
                     echo "<div>ID: " . $row["id"] . "</div>";
                     echo "<div>Nombre: " . $row["nombre"] . "</div>";
@@ -132,9 +134,9 @@ $nombreUsuario = $_SESSION['usuario'];
                     echo "<div>Descripción: " . $row["descripcion"] . "</div>";
                     echo "<div>Costo: $" . $row["costo"] . "</div>";
                     echo "<div>Stock: " . $row["stock"] . "</div>";
-                    echo "<div>Activo: " . ($row["status"] == 1 ? "Sí" : "No") . "</div>";
+                    echo "<div>Activo: " . ($row["status"] == 1 ? 'Sí' : 'No') . "</div>";
                     echo "<div class='foto-producto'><img src='./images/" . $row["archivo"] . "' alt='Foto de " . $row["nombre"] . "' style='max-width:150px;width:100%'></div>";
-                    echo "<div class='acciones'><a href='editar_producto.php?id=" . $row["id"] . "'>Editar</a> | <a href='eliminar_producto.php?id=" . $row["id"] . "' class='eliminar'>Eliminar</a> | <a href='ver_detalle.php?id=" . $row["id"] . "' class='detalle'>Ver detalle</a></div>";
+                    echo "<div class='acciones'><a href='editar_producto.php?id=" . $row["id"] . "'>Editar</a> | <a href='./funciones/eliminar_producto.php?id=" . $row["id"] . "' class='eliminar'>Eliminar</a> | <a href='ver_detalle.php?id=" . $row["id"] . "' class='detalle'>Ver detalle</a></div>";
                     echo "</div>";
                 }
             } else {

@@ -14,7 +14,7 @@ $nombreUsuario = $_SESSION['usuario'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de empleado</title>
+    <title>Detalle de producto</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +27,7 @@ $nombreUsuario = $_SESSION['usuario'];
             margin-bottom: 20px;
         }
 
-        .empleado {
+        .producto {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
@@ -35,7 +35,7 @@ $nombreUsuario = $_SESSION['usuario'];
             background-color: #fff;
         }
 
-        .empleado div {
+        .producto div {
             margin-bottom: 5px;
         }
 
@@ -96,27 +96,29 @@ $nombreUsuario = $_SESSION['usuario'];
     }
 
     if (isset($_GET['id']) && !empty($_GET['id'])) {
-        $empleado_id = $_GET['id'];
+        $producto_id = $_GET['id'];
 
-        $sql = "SELECT nombre, apellidos, correo, rol, activo, foto_encrypt as foto_real FROM empleados WHERE id=$empleado_id";
+        $sql = "SELECT nombre, codigo, descripcion, costo, stock, status, archivo_n as archivo FROM productos WHERE id = $producto_id";
         $result = $conn->query($sql);
 
         if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            echo "<h2>Detalle de empleado</h2>";
-            echo "<div class='empleado'>";
-            echo "<div>Nombre: " . $row["nombre"] . " " . $row["apellidos"] . "</div>";
-            echo "<div>Correo: " . $row["correo"] . "</div>";
-            echo "<div>Rol: " . $row["rol"] . "</div>";
-            echo "<div>Activo: " . ($row["activo"] ? "Sí" : "No") . "</div>";
-            echo "<img src='./images/" . $row["foto_real"] . "' alt='Foto de empleado' style='max-width:150px;width:100%'>";
+            echo "<h2>Detalle de producto</h2>";
+            echo "<div class='producto'>";
+            echo "<div>Nombre: " . $row["nombre"] . "</div>";
+            echo "<div>Codigo: " . $row["codigo"] . "</div>";
+            echo "<div>Descripción: " . $row["descripcion"] . "</div>";
+            echo "<div>Costo: $" . $row["costo"] . "</div>";
+            echo "<div>Stock: " . $row["stock"] . "</div>";
+            echo "<div>Activo: " . ($row["status"] ? "Sí" : "No") . "</div>";
+            echo "<img src='./images/" . $row["archivo"] . "' alt='Foto de producto' style='max-width:150px;width:100%'>";
             echo "</div>";
             echo "<p><a href='javascript:history.back()'>Regresar al listado</a></p>";
         } else {
-            echo "<p>No se encontró el empleado.</p>";
+            echo "<p>No se encontró el producto.</p>";
         }
     } else {
-        echo "<p>No se proporcionó un ID de empleado válido.</p>";
+        echo "<p>No se proporcionó un ID de producto válido.</p>";
     }
 
     $conn->close();
