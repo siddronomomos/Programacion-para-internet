@@ -35,18 +35,45 @@ $nombreUsuario = $_SESSION['usuario'];
                     }, 5000);
                 } else {
                     var formData = new FormData(this);
+                    var codigo = $("#codigo").val();
 
+                    $.ajax({
+                        type: "POST",
+                        url: "./funciones/validar_codigo.php",
+                        data: { codigo: codigo },
+                        success: function (response) {
+                            if (response.trim() === "El codigo " + codigo + " ya existe.") {
+                                $("#errorContainer").text("El código ya está registrado.");
+                                setTimeout(function () {
+                                    $("#errorContainer").text("");
+                                }, 5000);
+                            } else {
+                                guardarProducto(formData);
+                            }
+                        },
+                    });
+                }
+
+                function guardarProducto(formData) {
                     $.ajax({
                         type: "POST",
                         url: "./funciones/guardar_producto.php",
                         data: formData,
-                        processData: false,
                         contentType: false,
+                        processData: false,
                         success: function (response) {
-                            window.location.href = "./listado_productos.php";
-                        }
+                            if (response.trim() === "exito") {
+                                window.location.href = "listado_productos.php";
+                            } else {
+                                $("#errorContainer").text("Error al guardar el producto.");
+                                setTimeout(function () {
+                                    $("#errorContainer").text("");
+                                }, 5000);
+                            }
+                        },
                     });
                 }
+
             });
 
             $("#codigo").blur(function () {

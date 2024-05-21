@@ -26,7 +26,7 @@ if (move_uploaded_file($_FILES["foto"]["tmp_name"], $encrypted_target_file)) {
     $sql = "INSERT INTO empleados (nombre, apellidos, correo, pass, rol, foto_real, foto_encrypt) 
             VALUES ('$nombre', '$apellidos', '$codigo', '$password', '$rol', '$real_file_name', '$encrypted_name')";
     if ($conn->query($sql) === TRUE) {
-        echo "Empleado agregado correctamente";
+        echo "exito";
     } else {
         echo "Error al agregar empleado: " . $conn->error;
     }

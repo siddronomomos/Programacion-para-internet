@@ -25,7 +25,7 @@ if (move_uploaded_file($_FILES["archivo"]["tmp_name"], $encrypted_target_file)) 
     $sql = "INSERT INTO productos (nombre, codigo, descripcion, costo, stock, archivo_n, archivo)
             VALUES ('$nombre', '$codigo', '$descripcion', '$costo', '$stock', '$encrypted_name', '$real_file_name')";
     if ($conn->query($sql) === TRUE) {
-        echo "Producto agregado correctamente";
+        echo "exito";
     } else {
         echo "Error al agregar producto: " . $conn->error;
     }

@@ -35,18 +35,47 @@ $nombreUsuario = $_SESSION['usuario'];
                     }, 5000);
                 } else {
                     var formData = new FormData(this);
+                    var correo = $("#correo").val();
 
+                    $.ajax({
+                        type: "POST",
+                        url: "./funciones/validar_correo.php",
+                        data: { correo: correo },
+                        success: function (response) {
+                            if (response.trim() === "El correo " + correo + " ya existe.") {
+                                $("#errorContainer").text("El correo ya está registrado.");
+                                setTimeout(function () {
+                                    $("#errorContainer").text("");
+                                }, 5000);
+                            } else {
+                                guardarEmpleado(formData);
+                            }
+                        },
+                    });
+                }
+
+                function guardarEmpleado(formData) {
                     $.ajax({
                         type: "POST",
                         url: "./funciones/guardar_empleado.php",
                         data: formData,
-                        processData: false,
+                        cache: false,
                         contentType: false,
+                        processData: false,
                         success: function (response) {
-                            window.location.href = "./listado_empleados.php";
-                        }
+                            if (response.trim() === "exito") {
+                                alert("Empleado guardado con éxito.");
+                                window.location.href = "./listado_empleados.php";
+                            } else {
+                                $("#errorContainer").text("Error al guardar el empleado.");
+                                setTimeout(function () {
+                                    $("#errorContainer").text("");
+                                }, 5000);
+                            }
+                        },
                     });
                 }
+
             });
 
             $("#correo").blur(function () {

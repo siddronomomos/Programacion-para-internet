@@ -21,7 +21,7 @@ if ($_FILES['archivo']['name'] !== '') {
     $archivo_nombre_encriptado = md5(uniqid(rand(), true)) . '_' . $archivo_nombre_real;
     $ruta_destino = '../images/' . $archivo_nombre_encriptado;
 
-    if (move_uploaded_file($_FILES['foto']['tmp_name'], $ruta_destino)) {
+    if (move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta_destino)) {
         $old_archivo_sql = "SELECT archivo_n FROM productos WHERE id = $id";
         $result = $conn->query($old_archivo_sql);
         if ($result->num_rows > 0) {
