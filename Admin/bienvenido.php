@@ -67,10 +67,10 @@ $nombreUsuario = $_SESSION['usuario'];
             <a href="bienvenido.php">INICIO</a>
             <a href="./empleados/listado_empleados.php">EMPLEADOS</a>
             <a href="./productos/listado_productos.php">PRODUCTOS</a>
-            <a href="#">PROMOCIONES</a>
+            <a href="./promociones/listado_promociones.php">PROMOCIONES</a>
             <a href="#">PEDIDOS</a>
             <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
-            <a href="./funciones/cerrar_sesion.php">CERRAR SESIÓN</a>
+            <a href="./empleados/funciones/cerrar_sesion.php">CERRAR SESIÓN</a>
         </div>
     </div>
 </body>

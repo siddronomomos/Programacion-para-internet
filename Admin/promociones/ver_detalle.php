@@ -14,7 +14,7 @@ $nombreUsuario = $_SESSION['usuario'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de producto</title>
+    <title>Detalle de promocion</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +27,7 @@ $nombreUsuario = $_SESSION['usuario'];
             margin-bottom: 20px;
         }
 
-        .producto {
+        .promocion {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
@@ -35,7 +35,7 @@ $nombreUsuario = $_SESSION['usuario'];
             background-color: #fff;
         }
 
-        .producto div {
+        .promocion div {
             margin-bottom: 5px;
         }
 
@@ -96,29 +96,25 @@ $nombreUsuario = $_SESSION['usuario'];
     }
 
     if (isset($_GET['id']) && !empty($_GET['id'])) {
-        $producto_id = $_GET['id'];
+        $promocion_id = $_GET['id'];
 
-        $sql = "SELECT nombre, codigo, descripcion, costo, stock, status, archivo_n as archivo FROM productos WHERE id = $producto_id";
+        $sql = "SELECT * FROM promociones WHERE id = $promocion_id";
         $result = $conn->query($sql);
 
         if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            echo "<h2>Detalle de producto</h2>";
-            echo "<div class='producto'>";
+            echo "<h2>Detalle de promocion</h2>";
+            echo "<div class='promocion'>";
             echo "<div>Nombre: " . $row["nombre"] . "</div>";
-            echo "<div>Codigo: " . $row["codigo"] . "</div>";
-            echo "<div>Descripción: " . $row["descripcion"] . "</div>";
-            echo "<div>Costo: $" . $row["costo"] . "</div>";
-            echo "<div>Stock: " . $row["stock"] . "</div>";
             echo "<div>Activo: " . ($row["status"] ? "Sí" : "No") . "</div>";
-            echo "<img src='./images/" . $row["archivo"] . "' alt='Foto de producto' style='max-width:150px;width:100%'>";
+            echo "<img src='./images/" . $row["archivo"] . "' alt='Foto de promocion' style='max-width:150px;width:100%'>";
             echo "</div>";
             echo "<p><a href='javascript:history.back()'>Regresar al listado</a></p>";
         } else {
-            echo "<p>No se encontró el producto.</p>";
+            echo "<p>No se encontró la promocion.</p>";
         }
     } else {
-        echo "<p>No se proporcionó un ID de producto válido.</p>";
+        echo "<p>No se proporcionó un ID de promocion válido.</p>";
     }
 
     $conn->close();

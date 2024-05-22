@@ -10,6 +10,18 @@ if (isset($_GET['id'])) {
 
     $id_empleado = $_GET['id'];
 
+    $sqlArchivo = "SELECT foto_encrypt FROM empleados WHERE id = $id_empleado";
+    $result = $conn->query($sqlArchivo);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $archivo = $row['foto_encrypt'];
+        if (file_exists("../images/$archivo")) {
+            unlink("../images/$archivo");
+
+        }
+    }
+
     $sql = "UPDATE empleados SET eliminado = 1 WHERE id = $id_empleado";
 
     if ($conn->query($sql) === TRUE) {

@@ -15,82 +15,39 @@ $nombreUsuario = $_SESSION['usuario'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alta de empleados</title>
+    <title>Alta de promociones</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            $("#altaEmpleadoForm").submit(function (event) {
+            $("#altaPromocionForm").submit(function (event) {
                 event.preventDefault();
                 var nombre = $("#nombre").val();
-                var apellidos = $("#apellidos").val();
-                var correo = $("#correo").val();
-                var password = $("#password").val();
-                var rol = $("#rol").val();
-                var foto = $("#foto").val();
+                var archivo = $("#archivo").val();
 
-                if (nombre === "" || apellidos === "" || correo === "" || password === "" || rol === "" || foto === "") {
+                if (nombre === "" || archivo === "") {
                     $("#errorContainer").text("Faltan campos por llenar.");
                     setTimeout(function () {
                         $("#errorContainer").text("");
                     }, 5000);
                 } else {
                     var formData = new FormData(this);
-                    var correo = $("#correo").val();
 
-                    $.ajax({
-                        type: "POST",
-                        url: "./funciones/validar_correo.php",
-                        data: { correo: correo },
-                        success: function (response) {
-                            if (response.trim() === "El correo " + correo + " ya existe.") {
-                                $("#errorContainer").text("El correo ya está registrado.");
-                                setTimeout(function () {
-                                    $("#errorContainer").text("");
-                                }, 5000);
-                            } else {
-                                guardarEmpleado(formData);
-                            }
-                        },
-                    });
+                    guardarPromocion(formData);
                 }
 
-                function guardarEmpleado(formData) {
+                function guardarPromocion(formData) {
                     $.ajax({
                         type: "POST",
-                        url: "./funciones/guardar_empleado.php",
+                        url: "./funciones/guardar_promocion.php",
                         data: formData,
-                        cache: false,
                         contentType: false,
                         processData: false,
                         success: function (response) {
-                            if (response.trim() === "exito") {
-                                alert("Empleado guardado con éxito.");
-                                window.location.href = "./listado_empleados.php";
-                            } else {
-                                $("#errorContainer").text("Error al guardar el empleado.");
-                                setTimeout(function () {
-                                    $("#errorContainer").text("");
-                                }, 5000);
-                            }
+                            window.location.href = "./listado_promociones.php";
                         },
                     });
                 }
 
-            });
-
-            $("#correo").blur(function () {
-                var correo = $(this).val();
-                $.ajax({
-                    type: "POST",
-                    url: "./funciones/validar_correo.php",
-                    data: { correo: correo },
-                    success: function (response) {
-                        $("#errorContainer").text(response);
-                        setTimeout(function () {
-                            $("#errorContainer").text("");
-                        }, 5000);
-                    },
-                });
             });
         });
     </script>
@@ -195,7 +152,7 @@ $nombreUsuario = $_SESSION['usuario'];
 </head>
 
 <body>
-    <h2>Alta de empleados</h2>
+    <h2>Alta de promociones</h2>
     <div class="menu">
         <a href="../bienvenido.php">INICIO</a>
         <a href="../empleados/listado_empleados.php">EMPLEADOS</a>
@@ -205,35 +162,20 @@ $nombreUsuario = $_SESSION['usuario'];
         <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
         <a href="./funciones/cerrar_sesion.php">CERRAR SESIÓN</a>
     </div>
-    <form id="altaEmpleadoForm" enctype="multipart/form-data">
+    <form id="altaPromocionForm" enctype="multipart/form-data">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" /><br /><br />
 
-        <label for="apellidos">Apellidos:</label>
-        <input type="text" id="apellidos" name="apellidos" /><br /><br />
-
-        <label for="correo">Correo:</label>
-        <input type="email" id="correo" name="correo" /><br /><br />
-
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" /><br /><br />
-
-        <label for="rol">Rol:</label>
-        <select id="rol" name="rol">
-            <option value="">Seleccione un rol</option>
-            <option value="Gerente">Gerente</option>
-            <option value="Ejecutivo">Ejecutivo</option>
-        </select><br /><br />
-
-        <label for="foto" class="custom-file-upload">
-            <i class="fas fa-cloud-upload-alt"></i> Seleccionar Foto
+        <label for="archivo" class="custom-file-upload">
+            <i class="fas fa-cloud-upload-alt"></i> Seleccionar Archivo
         </label>
-        <input type="file" id="foto" name="foto" accept="image/*" required style="display: none;" /> <br>
 
-        <input type="submit" value="Guardar" />
+        <input type="file" id="archivo" name="archivo" accept="image/*" style="display: none;" /> <br>
+
+        <input type="submit" value="Guardar" onclick="" />
     </form>
     <div id="errorContainer"></div>
-    <p><a href="listado_empleados.php">Regresar al listado</a></p>
+    <p><a href="listado_promociones.php">Regresar al listado</a></p>
 </body>
 
 </html>

@@ -16,7 +16,7 @@ $nombreUsuario = $_SESSION['usuario'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de empleados</title>
+    <title>Listado de promociones</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,7 +29,7 @@ $nombreUsuario = $_SESSION['usuario'];
             margin-bottom: 20px;
         }
 
-        .empleado {
+        .promocion {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
@@ -37,7 +37,7 @@ $nombreUsuario = $_SESSION['usuario'];
             background-color: #fff;
         }
 
-        .empleado div {
+        .promocion div {
             margin-bottom: 5px;
         }
 
@@ -76,7 +76,7 @@ $nombreUsuario = $_SESSION['usuario'];
             text-decoration: underline;
         }
 
-        .foto-empleado {
+        .foto-promocion {
             text-align: center;
             max-width: 200px;
             max-height: 200px;
@@ -101,7 +101,7 @@ $nombreUsuario = $_SESSION['usuario'];
 </head>
 
 <body>
-    <h2>Listado de empleados</h2>
+    <h2>Listado de promociones</h2>
     <div class="menu">
         <a href="../bienvenido.php">INICIO</a>
         <a href="../empleados/listado_empleados.php">EMPLEADOS</a>
@@ -111,7 +111,7 @@ $nombreUsuario = $_SESSION['usuario'];
         <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
         <a href="./funciones/cerrar_sesion.php">CERRAR SESIÓN</a>
     </div>
-    <div id="listadoEmpleados">
+    <div id="listadoPromociones">
         <?php
         include ('./funciones/conecta.php');
         $conn = conecta();
@@ -119,7 +119,7 @@ $nombreUsuario = $_SESSION['usuario'];
             exit("Error al conectar a la base de datos");
         }
 
-        $sql = "SELECT id, nombre, apellidos, correo, rol, activo, eliminado, foto_encrypt as foto_real FROM empleados";
+        $sql = "SELECT id, nombre, status, eliminado, archivo FROM promociones";
         $result = $conn->query($sql);
 
         if ($result) {
@@ -127,19 +127,16 @@ $nombreUsuario = $_SESSION['usuario'];
                 while ($row = $result->fetch_assoc()) {
                     if ($row["eliminado"] == 1)
                         continue;
-                    echo "<div class='empleado'>";
+                    echo "<div class='promocion'>";
                     echo "<div>ID: " . $row["id"] . "</div>";
                     echo "<div>Nombre: " . $row["nombre"] . "</div>";
-                    echo "<div>Apellidos: " . $row["apellidos"] . "</div>";
-                    echo "<div>Correo: " . $row["correo"] . "</div>";
-                    echo "<div>Rol: " . $row["rol"] . "</div>";
-                    echo "<div>Activo: " . ($row["activo"] == 1 ? "Sí" : "No") . "</div>";
-                    echo "<div class='foto-empleado'><img src='./images/" . $row["foto_real"] . "' alt='Foto de " . $row["nombre"] . " " . $row["apellidos"] . "'style='max-width:150px;width:100%'></div>";
-                    echo "<div class='acciones'><a href='editar_empleado.php?id=" . $row["id"] . "'>Editar</a> | <a href='./funciones/eliminar_empleado.php?id=" . $row["id"] . "' class='eliminar'>Eliminar</a> | <a href='ver_detalle.php?id=" . $row["id"] . "' class='detalle'>Ver detalle</a></div>";
+                    echo "<div>Activo: " . ($row["status"] == 1 ? 'Sí' : 'No') . "</div>";
+                    echo "<div class='foto-promocion'><img src='./images/" . $row["archivo"] . "' alt='Foto de " . $row["nombre"] . "' style='max-width:150px;width:100%'></div>";
+                    echo "<div class='acciones'><a href='editar_promocion.php?id=" . $row["id"] . "'>Editar</a> | <a href='./funciones/eliminar_promocion.php?id=" . $row["id"] . "' class='eliminar'>Eliminar</a> | <a href='ver_detalle.php?id=" . $row["id"] . "' class='detalle'>Ver detalle</a></div>";
                     echo "</div>";
                 }
             } else {
-                echo "<p>No hay empleados registrados.</p>";
+                echo "<p>No hay promociones registradas.</p>";
             }
         } else {
             echo "<p>Error al recuperar datos: " . $conn->error . "</p>";
@@ -148,7 +145,7 @@ $nombreUsuario = $_SESSION['usuario'];
         $conn->close();
         ?>
     </div>
-    <p><a href="formulario_empleados.php">Agregar nuevo empleado</a></p>
+    <p><a href="formulario_promociones.php">Agregar nueva promocion</a></p>
 </body>
 
 </html>
