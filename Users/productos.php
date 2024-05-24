@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 if (!isset($_SESSION['username'])) {
@@ -6,33 +7,25 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+$nombreUsuario = $_SESSION['username'];
+
+$productossql = "SELECT * FROM productos WHERE status = 1 AND eliminado = 0";
+
 include ('./funciones/conecta.php');
 
 $conn = conecta();
 
-$nombreUsuario = $_SESSION['username'];
+$productresult = $conn->query($productossql);
 
-$bannersql = "SELECT * FROM promociones WHERE status = 1 AND eliminado = 0 ORDER BY RAND() LIMIT 1";
-$result = $conn->query($bannersql);
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $banner = $row['archivo'];
-    $bannertitle = $row['nombre'];
-} else {
-    $banner = '';
-}
-
-$productsql = "SELECT * FROM productos WHERE status = 1 AND eliminado = 0 ORDER BY RAND() LIMIT 3";
-$productresult = $conn->query($productsql);
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido al sistema</title>
+    <title>Productos</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -75,7 +68,6 @@ $productresult = $conn->query($productsql);
                             success: function (newStock) {
                                 if (!isNaN(newStock)) {
                                     productContainer.find(".stock").text("Stock: " + newStock);
-                                    console.log(productContainer);
                                     productContainer.find("input[name='quantity']").attr("max", newStock);
                                 }
                             }
@@ -132,27 +124,6 @@ $productresult = $conn->query($productsql);
             background-color: #0056b3;
         }
 
-        .banner {
-            margin-top: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .bannerimg {
-            max-width: 100%;
-            max-height: 350px;
-        }
-
-        .offerTitle {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #007bff;
-        }
-
-        .bannerTitle {
-            color: green;
-        }
-
         .product-list-title {
             text-align: center;
             margin-bottom: 20px;
@@ -203,9 +174,15 @@ $productresult = $conn->query($productsql);
         }
 
         .btn-cart {
-            border: none;
             background-color: #28A745;
             color: white;
+            border: none;
+        }
+
+        .btn-carty {
+            background-color: #28A745;
+            color: white;
+            border: none;
         }
 
         .btn-cart:hover {
@@ -249,14 +226,7 @@ $productresult = $conn->query($productsql);
             <a href="./funciones/cerrar_sesion.php">Cerrar sesión</a>
         </div>
     </div>
-    <div class="offerTitle">
-        <h1>Ofertas del día</h1>
-    </div>
-    <div class="banner">
-        <h2 class="bannerTitle"><?php echo $bannertitle; ?> </h2>
-        <img src="../Admin/promociones/images/<?php echo $banner; ?>" alt="Banner" class="bannerimg">
-    </div>
-    <h2 class="product-list-title">Productos destacados</h2>
+    <h2 class="product-list-title">Productos</h2>
     <?php if ($productresult->num_rows > 0) {
         echo "<div class=\"products-container\">";
         while ($productrow = $productresult->fetch_assoc()) {

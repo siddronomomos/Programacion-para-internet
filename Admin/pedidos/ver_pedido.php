@@ -7,16 +7,14 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 $nombreUsuario = $_SESSION['usuario'];
-
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de promociones</title>
+    <title>Detalle de empleado</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,7 +27,7 @@ $nombreUsuario = $_SESSION['usuario'];
             margin-bottom: 20px;
         }
 
-        .promocion {
+        .empleado {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
@@ -37,7 +35,7 @@ $nombreUsuario = $_SESSION['usuario'];
             background-color: #fff;
         }
 
-        .promocion div {
+        .empleado div {
             margin-bottom: 5px;
         }
 
@@ -51,22 +49,6 @@ $nombreUsuario = $_SESSION['usuario'];
             text-decoration: underline;
         }
 
-        .acciones a.eliminar {
-            color: #dc3545;
-        }
-
-        .acciones a.eliminar:hover {
-            color: #c82333;
-        }
-
-        .acciones a.detalle {
-            color: #28a745;
-        }
-
-        .acciones a.detalle:hover {
-            color: #218838;
-        }
-
         p a {
             text-decoration: none;
             color: #007bff;
@@ -76,12 +58,6 @@ $nombreUsuario = $_SESSION['usuario'];
             text-decoration: underline;
         }
 
-        .foto-promocion {
-            text-align: center;
-            max-width: 200px;
-            max-height: 200px;
-            overflow: auto;
-        }
 
         .menu {
             text-align: center;
@@ -101,7 +77,7 @@ $nombreUsuario = $_SESSION['usuario'];
 </head>
 
 <body>
-    <h2>Listado de promociones</h2>
+    <h2>Ver Detalle</h2>
     <div class="menu">
         <a href="../bienvenido.php">INICIO</a>
         <a href="../empleados/listado_empleados.php">EMPLEADOS</a>
@@ -111,41 +87,63 @@ $nombreUsuario = $_SESSION['usuario'];
         <a href="#">BIENVENIDO <?php echo $nombreUsuario; ?></a>
         <a href="./funciones/cerrar_sesion.php">CERRAR SESIÓN</a>
     </div>
-    <div id="listadoPromociones">
-        <?php
-        include ('./funciones/conecta.php');
-        $conn = conecta();
-        if (!$conn) {
-            exit("Error al conectar a la base de datos");
-        }
+    <?php
+    include ('./funciones/conecta.php');
+    $conn = conecta();
 
-        $sql = "SELECT id, nombre, status, eliminado, archivo FROM promociones";
+    if (!$conn) {
+        exit("Error al conectar a la base de datos");
+    }
+
+    if (isset($_GET['id']) && !empty($_GET['id'])) {
+        $pedido_id = $_GET['id'];
+        $sql = "SELECT * FROM pedidos WHERE id = $pedido_id";
         $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $pedido = $result->fetch_assoc();
+            $productos = unserialize($pedido['productos']);
+            $total = 0;
+            $values = array_count_values($productos);
+            $ids = array_keys($values);
+            $in = implode(',', $ids);
+            $useri = $pedido['userid'];
+            $sql = "SELECT * FROM usuarios WHERE id = $useri";
+            $res = $conn->query($sql);
+            $user = $res->fetch_assoc();
 
-        if ($result) {
+
+
+
+            echo "<div class=\"empleado\">";
+            echo "<div> ID: " . $pedido['id'] . "</div>";
+            echo "<div> Usuario: " . $user['username'] . "</div>";
+            echo "<div> Productos: </div>";
+
+            $sql = "SELECT * FROM productos WHERE id IN ($in)";
+            $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    if ($row["eliminado"] == 1)
-                        continue;
-                    echo "<div class='promocion'>";
-                    echo "<div>ID: " . $row["id"] . "</div>";
-                    echo "<div>Nombre: " . $row["nombre"] . "</div>";
-                    echo "<div>Activo: " . ($row["status"] == 1 ? 'Sí' : 'No') . "</div>";
-                    echo "<div class='foto-promocion'><img src='./images/" . $row["archivo"] . "' alt='Foto de " . $row["nombre"] . "' style='max-width:150px;width:100%'></div>";
-                    echo "<div class='acciones'><a href='editar_promocion.php?id=" . $row["id"] . "'>Editar</a> | <a href='./funciones/eliminar_promocion.php?id=" . $row["id"] . "' class='eliminar'>Eliminar</a> | <a href='ver_detalle.php?id=" . $row["id"] . "' class='detalle'>Ver detalle</a></div>";
-                    echo "</div>";
+                    $total += $row['costo'] * $values[$row['id']];
+                    $subtotal = $row['costo'] * $values[$row['id']];
+                    echo "<div> - " . $row['nombre'] . " - Cantidad: " . $values[$row['id']] . " - Precio: $" . $row['costo'] . " - Subtotal: $" . $subtotal . "</div>";
+                    echo "<img src=\"../productos/images/" . $row['archivo_n'] . "\" width=\"100\" height=\"100\">";
                 }
-            } else {
-                echo "<p>No hay promociones registradas.</p>";
-            }
-        } else {
-            echo "<p>Error al recuperar datos: " . $conn->error . "</p>";
-        }
 
-        $conn->close();
-        ?>
+            }
+            echo "<div> Total: $" . $total . "</div>";
+        }
+    }
+
+
+
+
+    $conn->close();
+    ?>
+
+    <div class="acciones">
+        <a href="./listado_pedidos.php">Volver</a>
     </div>
-    <p><a href="formulario_promociones.php">Agregar nueva promocion</a></p>
+
 </body>
 
 </html>
